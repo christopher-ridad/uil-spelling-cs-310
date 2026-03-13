@@ -93,7 +93,7 @@ All endpoints return the following structure on error:
 
 | Status Code | Meaning |
 |---|---|
-| 400 | Bad request — missing required fields |
+| 400 | Client error: missing required fields |
 | 500 | Server error |
 
 ---
