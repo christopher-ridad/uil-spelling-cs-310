@@ -8,7 +8,6 @@ import sys
 # eliminate traceback so we just get error message:
 sys.tracebacklimit = 0
 
-
 baseurl = "https://qk7g2mpk1h.execute-api.us-east-1.amazonaws.com/test"
 
 url = baseurl + "/misspell"
