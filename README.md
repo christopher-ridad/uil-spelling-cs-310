@@ -43,6 +43,14 @@ Generates a single plausible misspelling of a given word.
 
 Returns a weighted list of words for a quiz session, prioritizing words the user has struggled with.
 
+Adaptive scoring algorithm:
+```
+score = 1 - (correct / total_attempts)
+```
+
+Words are sampled probabilistically without replacement using `score` as weight.
+If a user has no history rows yet (cold start), the endpoint returns the first `N` words from `words` (ordered by `word`).
+
 **Request**
 ```json
 {
@@ -54,12 +62,14 @@ Returns a weighted list of words for a quiz session, prioritizing words the user
 **Response**
 ```json
 {
-  "message": "success",
-  "data": {
-    "words": ["accommodate", "pneumonia", "necessary"]
-  }
+  "words": ["accommodate", "pneumonia", "necessary"]
 }
 ```
+
+**Route verification (stub mode)**
+- Set Lambda environment variable `QUIZ_USE_STUB=true`
+- Call `POST /quiz` with any valid `userId` and `count`
+- Lambda returns a fixed stub list slice, confirming API Gateway route wiring before database setup
 
 ---
 
@@ -117,6 +127,7 @@ All endpoints return the following structure on error:
   - `RDS_USER` — database username
   - `RDS_PASS` — database password
   - `GEMINI_API_KEY` — only needed on the `misspell` Lambda
+  - `QUIZ_USE_STUB` — set to `true` only for temporary `/quiz` route verification
 
 ### 3. API Gateway
 - Create a REST API with three routes pointing to each Lambda:

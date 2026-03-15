@@ -1,4 +1,5 @@
 import json
+import os
 import inspect
 import logging
 import pymysql
@@ -73,7 +74,7 @@ def get_streak(userId):
         dbCursor.execute(sql, (userId,))
         rows = dbCursor.fetchall()
 
-        seen_days = {int(row[0]) for row in rows}
+        seen_days = {row[0] for row in rows}
 
         streak = 0
         while streak in seen_days:
@@ -111,7 +112,7 @@ def get_totalPracticed(userId):
 
         sql = """
             SELECT
-            COALESCE(SUM(total_attempts > 0), 0)
+            COALESCE(SUM(total_attempts), 0)
             FROM user_history
             WHERE user_id = %s;
         """
@@ -119,7 +120,7 @@ def get_totalPracticed(userId):
         dbCursor.execute(sql, (userId,))
         row = dbCursor.fetchone()
 
-        return int(row[0])
+        return row[0]
         
     except Exception as err:
         logging.error("lambda_handler.get_totalPracticed():")
@@ -159,7 +160,7 @@ def get_accuracy(userId):
         dbCursor.execute(sql, (userId,))
         row = dbCursor.fetchone()
 
-        return int(row[0])
+        return row[0]
         
     except Exception as err:
         logging.error("lambda_handler.get_accuracy():")
@@ -193,7 +194,7 @@ def get_daily(userId):
             FROM user_history
             WHERE user_id = %s
             GROUP BY DATE(last_seen)
-            ORDER BY DATE(last_seen) DESC;
+            ORDER BY DATE(last_seen);
         """
             
         dbCursor.execute(sql, (userId,))
@@ -201,7 +202,7 @@ def get_daily(userId):
         data = {}
 
         for row in rows:
-            data[str(row[0])] = int(row[1])
+            data[str(row[0])] = row[1]
         
         return data
         
@@ -241,7 +242,7 @@ def lambda_handler(event, context):
                 'body': json.dumps({"message": "request has no key 'userId'", "data": {}})
             }
 
-        userId = int(path_params["userId"])
+        userId = path_params["userId"]
 
         print("userId:", userId)
 
