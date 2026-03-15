@@ -9,6 +9,7 @@
 import requests
 import sys
 import random
+import time
 
 # eliminate traceback so we just get error message:
 sys.tracebacklimit = 0
@@ -51,7 +52,7 @@ print("Welcome to the UIL Spelling Quiz!")
 print("----------------------------------")
 
 user_id = input("Enter your user ID: ")
-num_words = 5  # number of words per quiz session
+num_words = 3  # number of words per quiz session
 
 print(f"\nFetching {num_words} words for your quiz...")
 words = get_quiz_words(user_id, num_words)
@@ -72,7 +73,7 @@ for i, word in enumerate(words):
 
   while len(misspellings) < 4 and attempts < 8:
     m = get_misspelling(word)
-    # make sure we don't get duplicates or the correct word back:
+    time.sleep(1)
     if m not in misspellings and m != word:
       misspellings.append(m)
     attempts += 1
@@ -117,4 +118,7 @@ stats = get_stats(user_id)
 
 print(f"Current streak:    {stats['streak']} days")
 print(f"Total practiced:   {stats['totalPracticed']} words")
-print(f"Overall accuracy:  {int(stats['accuracy'] * 100)}%")
+print(f"Overall accuracy:  {stats['accuracy']}%")
+print(f"Daily breakdown:")
+for day, count in stats['daily'].items():
+    print(f"  {day}: {count} words")

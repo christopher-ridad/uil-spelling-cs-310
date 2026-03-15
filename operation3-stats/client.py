@@ -5,8 +5,7 @@ import sys
 
 sys.tracebacklimit = 0
 
-baseurl = "https://qk7g2mpk1h.execute-api.us-east-1.amazonaws.com"
-
+baseurl = "https://qk7g2mpk1h.execute-api.us-east-1.amazonaws.com/test"
 
 def stats_client (userId):
     try:
