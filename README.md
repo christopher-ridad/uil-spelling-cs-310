@@ -9,7 +9,7 @@ Backend web service for a UIL competitive spelling study tool. Manages ~1,500 of
 
 ## Base URL
 ```
-https://...us-east-1.amazonaws.com/prod
+https://qk7g2mpk1h.execute-api.us-east-1.amazonaws.com/test
 ```
 
 ---
